@@ -15,6 +15,9 @@ def Delete_Repeated_Item(set):
       return
 
 
+# all_feature_set: the set of all features
+# num_observations: the number of observations, which is also the size of the subset
+# check_repeat: delete repeated values (always true)
 def Get_Target_Feature_Set(all_feature_set, num_observations, check_repeat=True):
       if num_observations == 1:
             whole_list = []
@@ -63,7 +66,6 @@ def Observe(hypo_map, true_hypo, target_feature_set):
                         check = False
             if check:
                   list.append(hypo)
-      return 1 if len(list) == 1 else 0
+      return 1 / len(list) if len(list) >= 1 else 0
 
-
-#print(Get_Target_Feature_Set([0, 1, 2], 3))
+# print(Get_Target_Feature_Set([0, 1, 2], 3))
