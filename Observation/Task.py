@@ -45,12 +45,12 @@ def Probability_Task(hypo_map, number_obs, number_hypo, number_feature, number_l
             # Choose a feature to observe
             for feature_set in feature_list:
                   # Get the probability that L will select this feature / these features
-                  prob = Observe.Get_Probability_Map(p_teacher_x_h, hypo, feature_set)
+                  # prob = Observe.Get_Probability_Map(p_teacher_x_h, hypo, feature_set)
 
                   # Does the learner find the true hypo ?
-                  prob_t = Observe.Observe(hypo_map, hypo_map[hypo], feature_set)
+                  prob_find = Observe.Observe(hypo_map, hypo_map[hypo], feature_set)
 
-                  F.append(prob * prob_t)
+                  F.append( prob_find)
             list.append(F)
 
       return list
