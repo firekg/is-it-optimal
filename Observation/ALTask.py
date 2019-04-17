@@ -83,13 +83,9 @@ class ActiveLearning:
             return
 
       def P_Task(self):
-            for obs in range(1, self.num_feature + 1):
-                  p_h_x = Task.Probability_Task(self.hypo_table, obs, self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h)
-                  print(np.array(p_h_x))
-                  p_x = np.sum(p_h_x, axis=0) / len(p_h_x)
-                  print(p_x)
-                  p = np.sum(p_x) / len(p_x)
-                  print(p)
+            print(self.p_teacher_x_h)
+            p_h_x = Task.Probability_Task(self.hypo_table, self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h)
+            print(p_h_x)
             return
 
       def ReportTable(self, hypo_table=True, p_teacher_xy_h=False, p_y_xh=False, p_teacher_x_h=True, p_learner_h_xy=True, format=False, textcopy=False):

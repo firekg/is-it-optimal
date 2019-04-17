@@ -1,6 +1,8 @@
 import Normalize
+import numpy
 import Observe
 import Init
+import copy
 import Teach
 import Learn
 
@@ -32,25 +34,49 @@ def Knowledgeability_Task(loopstep=0, hypo=None, feature=None, label=None, p_tea
       return
 
 
-def Probability_Task(hypo_map, number_obs, number_hypo, number_feature, number_label, p_teacher_x_h):
-      list = []
+# hypo_map: The map of the hypothesis
+# return: a map from hypothesis to observation * probability
+def Probability_Task(hypo_map, number_hypo, number_feature, number_label, p_teacher_x_h):
+      prob_list = { }
+      feature_set = []
 
-      feature_list = Observe.Get_Target_Feature_Set([0, 1, 2], number_obs)
-      print(feature_list)
-
-      # Assume there is a true hypo
+      # Assume there is a true hypo = hypo
       # Get all posible hypothesis in the hypo map
-      for hypo in range(number_hypo):
-            F = []
-            # Choose a feature to observe
-            for feature_set in feature_list:
-                  # Get the probability that L will select this feature / these features
-                  # prob = Observe.Get_Probability_Map(p_teacher_x_h, hypo, feature_set)
+      for hypo_idx in range(len(hypo_map)):
 
-                  # Does the learner find the true hypo ?
-                  prob_find = Observe.Observe(hypo_map, hypo_map[hypo], feature_set)
+            # Get the observable feature set
+            for f in range(number_feature):
+                  feature_set.append(f)
+            obs = 0
+            prob = []
+            # Make a copy of the whole hypo map
+            hypo_map_copy = copy.deepcopy(hypo_map)
+            while True:
+                  # Choose a feature
+                  feature = Observe.Get_Feature(feature_set, hypo_idx, p_teacher_x_h)
+                  obs += 1
+                  prob_find, hypo_map_copy = Observe.Observe(hypo_map_copy, hypo_map[hypo_idx], feature)
+                  prob.append(prob_find)
+                  # remove the feature in the feature set
+                  feature_set.remove(feature)
+                  if len(feature_set) == 0:
+                        prob_list[hypo_idx] = prob
+                        break
+      return prob_list
 
-                  F.append( prob_find)
-            list.append(F)
 
-      return list
+# Sum over x
+def Get_Prob_Table(number_obs, p_teacher_x_h, prob_list):
+      # Again get the feature list
+      feature_list = Observe.Get_Target_Feature_Set([0, 1, 2], number_obs)
+
+      # The new probability map with a lenth = number of hypothesis
+      new_prob_list = numpy.zeros(len(prob_list))
+
+      for hypo in range(len(prob_list)):
+            sum = 0
+            for feature in range(len(feature_list)):
+                  prob_select = Observe.Get_Probability(p_teacher_x_h, hypo, feature_list[feature])
+                  sum += prob_list[hypo, feature] * prob_select
+            new_prob_list[hypo] = sum
+      return new_prob_list
