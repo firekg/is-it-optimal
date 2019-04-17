@@ -1,5 +1,6 @@
 import numpy as np
 import Normalize
+import Init
 import Observe
 import Task
 import Report
@@ -51,28 +52,9 @@ class ActiveLearning:
             for h in range(self.num_hypo + 1): self.hypo_table[h, 0:self.num_hypo - h] = 1
 
       # Set the user hypothesis and the corresponding environment
-      def Set(self, user_hypo):
-            self.hypo_table = user_hypo
-            self.num_hypo = len(user_hypo)
-            self.num_feature = len(user_hypo[0])
-            list = []
-            for hypo in user_hypo:
-                  for feature in hypo:
-                        if feature not in list:
-                              list.append(feature)
-            self.num_label = len(list)
-            self.h_unexplored = self.num_hypo
-            self.p_y_xh = np.zeros((self.num_label, self.num_feature, self.num_hypo), dtype=int)
-            self.delta_g_h = np.zeros((self.num_hypo, self.num_hypo), dtype=float)
-            for h in range(self.num_hypo):
-                  for x in range(self.num_feature):
-                        for y in range(self.num_label):
-                              self.p_y_xh[y, x, h] = 1 if user_hypo[h][x] == y else 0
-            self.delta_g_h.fill((1 - self.knowledge) / (self.num_hypo - 1) if self.num_hypo > 1 else 1)
-            np.fill_diagonal(self.delta_g_h, self.knowledge)
-            self.p_teacher_x_h = np.zeros((self.num_feature, self.num_hypo), dtype=float)
-            self.p_teacher_xy_h = np.zeros((self.num_feature, self.num_label, self.num_hypo), dtype=float)
-            self.p_learner_h_xy = np.zeros((self.num_hypo, self.num_feature, self.num_label))
+      def Set(self, user_hypo, k):
+            self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h, \
+            self.p_teacher_xy_h, self.p_learner_h_xy, self.p_y_xh, self.delta_g_h = Init.Set(user_hypo, k)
 
       def N_Task(self, loopstep=0):
             Task.Normal_Task(loopstep, self.num_hypo, self.num_feature, self.num_label, self.p_teacher_xy_h, self.p_learner_h_xy, self.p_y_xh)
