@@ -36,7 +36,7 @@ def Knowledgeability_Task(loopstep=0, hypo=None, feature=None, label=None, p_tea
 
 # hypo_map: The map of the hypothesis
 # return: a map from hypothesis to observation * probability
-def Probability_Task(hypo_table, number_hypo, number_feature, number_label, p_teacher_x_h):
+def Probability_Task(hypo_table, number_hypo, number_feature, number_label, p_teacher_x_h, knowledgeability):
       prob_map = { }
       feature_set = []
 
@@ -54,7 +54,7 @@ def Probability_Task(hypo_table, number_hypo, number_feature, number_label, p_te
             while True:
 
                   # Pass the hypo_copy to Set function
-                  num_hypo, num_feature, num_label, p_teacher_x_h, p_teacher_xy_h, p_learner_h_xy, p_y_xh, delta_g_h = Init.Set(hypo_map_copy)
+                  num_hypo, num_feature, num_label, p_teacher_x_h, p_teacher_xy_h, p_learner_h_xy, p_y_xh, delta_g_h = Init.Set(hypo_map_copy, knowledgeability=knowledgeability)
                   # Get the PT
                   Knowledgeability_Task(500, num_hypo, num_feature, num_label, p_teacher_xy_h, p_teacher_x_h, p_learner_h_xy, p_y_xh, delta_g_h)
 

@@ -66,7 +66,7 @@ class ActiveLearning:
 
       def P_Task(self):
             print(self.p_teacher_x_h)
-            p_h_x = Task.Probability_Task(self.hypo_table, self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h)
+            p_h_x = Task.Probability_Task(self.hypo_table, self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h, self.knowledge)
             print(p_h_x)
             return
 
