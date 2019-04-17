@@ -3,6 +3,13 @@ import copy
 import numpy
 
 
+def Get_Index(original_table, new_table, hypo_idx):
+      # Get the current index of the p_teacher_xh
+      for i in range(len(new_table)):
+            if new_table[i] == original_table[hypo_idx]:
+                  return i
+
+
 # Get the feature with the highest Pt
 # observable_feature_set: the set that contains all select-able features
 # hypo: current true hypo

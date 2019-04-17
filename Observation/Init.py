@@ -17,6 +17,12 @@ def Initstep(number_hypos, number_features, number_labels, p_y_xh):
 
 
 # Set a user defined hypothesis
+# Return:
+#        num_hypo: number of hypothesis
+#        num_feature: number of features
+#        num_label: number of labels
+#        p_teacher_x_h: PT(x|h)
+#        p_teacher_xy_h: PT(x,y|h)
 def Set(user_hypo_map, knowledgeability=1.0):
       # Get number_hypo, number_feature, num_label automatically
       num_hypo = len(user_hypo_map)

@@ -3,6 +3,7 @@ import Normalize
 import numpy
 import Observe
 import Init
+import copy
 import Teach
 import Learn
 
