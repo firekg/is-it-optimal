@@ -52,9 +52,9 @@ class ActiveLearning:
             for h in range(self.num_hypo + 1): self.hypo_table[h, 0:self.num_hypo - h] = 1
 
       # Set the user hypothesis and the corresponding environment
-      def Set(self, user_hypo, k):
-            self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h, \
-            self.p_teacher_xy_h, self.p_learner_h_xy, self.p_y_xh, self.delta_g_h = Init.Set(user_hypo, k)
+      def Set(self, user_hypo):
+            self.hypo_table = user_hypo
+            self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h, self.p_teacher_xy_h, self.p_learner_h_xy, self.p_y_xh, self.delta_g_h = Init.Set(user_hypo, self.knowledge)
 
       def N_Task(self, loopstep=0):
             Task.Normal_Task(loopstep, self.num_hypo, self.num_feature, self.num_label, self.p_teacher_xy_h, self.p_learner_h_xy, self.p_y_xh)
