@@ -37,7 +37,7 @@ def Knowledgeability_Task(loopstep=0, hypo=None, feature=None, label=None, p_tea
 # hypo_map: The map of the hypothesis
 # return: a map from hypothesis to observation * probability
 def Probability_Task(hypo_map, number_hypo, number_feature, number_label, p_teacher_x_h):
-      prob_list = { }
+      prob_map = { }
       feature_set = []
 
       # Assume there is a true hypo = hypo
@@ -52,6 +52,12 @@ def Probability_Task(hypo_map, number_hypo, number_feature, number_label, p_teac
             # Make a copy of the whole hypo map
             hypo_map_copy = copy.deepcopy(hypo_map)
             while True:
+                  '''
+                  # Pass the hypo_copy to Set function
+                  num_hypo, num_feature, num_label, p_teacher_x_h, p_teacher_xy_h, p_learner_h_xy, p_y_xh, delta_g_h = Init.Set(hypo_map_copy)
+                  # Get the PT
+                  Knowledgeability_Task(1000, num_hypo, num_feature, num_label, p_teacher_xy_h, p_teacher_x_h, p_learner_h_xy, p_y_xh, delta_g_h)
+                  '''
                   # Choose a feature
                   feature = Observe.Get_Feature(feature_set, hypo_idx, p_teacher_x_h)
                   obs += 1
@@ -60,23 +66,6 @@ def Probability_Task(hypo_map, number_hypo, number_feature, number_label, p_teac
                   # remove the feature in the feature set
                   feature_set.remove(feature)
                   if len(feature_set) == 0:
-                        prob_list[hypo_idx] = prob
+                        prob_map[hypo_idx] = prob
                         break
-      return prob_list
-
-
-# Sum over x
-def Get_Prob_Table(number_obs, p_teacher_x_h, prob_list):
-      # Again get the feature list
-      feature_list = Observe.Get_Target_Feature_Set([0, 1, 2], number_obs)
-
-      # The new probability map with a lenth = number of hypothesis
-      new_prob_list = numpy.zeros(len(prob_list))
-
-      for hypo in range(len(prob_list)):
-            sum = 0
-            for feature in range(len(feature_list)):
-                  prob_select = Observe.Get_Probability(p_teacher_x_h, hypo, feature_list[feature])
-                  sum += prob_list[hypo, feature] * prob_select
-            new_prob_list[hypo] = sum
-      return new_prob_list
+      return prob_map
