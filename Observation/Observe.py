@@ -38,6 +38,6 @@ def Observe(hypo_map, true_hypo, target_feature_idx):
                   check = False
             else:
                   list.append(hypo)
-      return 1 / len(list) if len(list) >= 1 else 0, list
+      return len(list), list
 
 # print(Get_Target_Feature_Set([0, 1, 2], 3))

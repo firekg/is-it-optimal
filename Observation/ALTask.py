@@ -57,10 +57,12 @@ class ActiveLearning:
             self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h, self.p_teacher_xy_h, self.p_learner_h_xy, self.p_y_xh, self.delta_g_h = Init.Set(user_hypo, self.knowledge)
 
       def N_Task(self, loopstep=0):
+            self.p_learner_h_xy = Init.Initstep(self.num_hypo, self.num_feature, self.num_label, self.p_y_xh)
             Task.Normal_Task(loopstep, self.num_hypo, self.num_feature, self.num_label, self.p_teacher_xy_h, self.p_learner_h_xy, self.p_y_xh)
             return
 
       def K_Task(self, loopstep=0):
+            self.p_learner_h_xy = Init.Initstep(self.num_hypo, self.num_feature, self.num_label, self.p_y_xh)
             Task.Knowledgeability_Task(loopstep, self.num_hypo, self.num_feature, self.num_label, self.p_teacher_xy_h, self.p_teacher_x_h, self.p_learner_h_xy, self.p_y_xh, self.delta_g_h)
             return
 
