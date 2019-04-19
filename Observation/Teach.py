@@ -2,19 +2,6 @@ import numpy as np
 import Normalize
 
 
-# eq. 5b)
-# PT(x,y | h) = PL(h|x,y) PT(x,y)
-# The final table will be a 3D table
-def PTeacher_xy_h(number_hypos, number_features, number_labels, table_prob_t_xy_h, table_prob_l_h_xy):
-      # The value of PT(x,y)
-      prob_t_xy = 1 / number_features / number_labels
-      for h in range(number_hypos):
-            for x in range(number_features):
-                  for y in range(number_labels):
-                        table_prob_t_xy_h[x, y, h] = table_prob_l_h_xy[h, x, y] * prob_t_xy
-      return
-
-
 # eq. 6b)
 # PT(x|g) = Sum_y  ( PL(g|x,y) * PT(x,y) )
 # 'K' stands for the knowledgebility model

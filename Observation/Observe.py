@@ -30,9 +30,10 @@ def Get_Feature(observable_feature_set, hypo_idx, p_teacher_xh):
 # hypo_map: the set of all hypothesis
 # true_hypo: the true hypo
 # target_feature: the target features we want to observe
-def Observe(hypo_map, true_hypo_idx, true_hypo, target_feature_idx, p_learner_h_xy):
+def Observe(hypo_map, true_hypo_idx, target_feature_idx, p_learner_h_xy):
       list = []
       # Get the true label
+      true_hypo = hypo_map[true_hypo_idx]
       true_label = true_hypo[target_feature_idx]
 
       for hypo in hypo_map:
@@ -40,4 +41,4 @@ def Observe(hypo_map, true_hypo_idx, true_hypo, target_feature_idx, p_learner_h_
                   check = False
             else:
                   list.append(hypo)
-      return p_learner_h_xy[true_hypo_idx][target_feature_idx][true_label] if len(p_learner_h_xy) > 1 else 1.0, list
+      return p_learner_h_xy[true_hypo_idx][target_feature_idx][true_label], true_label

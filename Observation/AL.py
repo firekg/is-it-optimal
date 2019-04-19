@@ -1,4 +1,4 @@
-import numpy as np
+import numpy
 import Normalize
 import Init
 import Observe
@@ -24,10 +24,10 @@ class ActiveLearning:
             self.num_label = Labelsize
 
             # The P(y|x,h) table for the boundary task
-            self.p_y_xh = np.zeros((self.num_label, self.num_feature, self.num_hypo), dtype=int)
+            self.p_y_xh = numpy.zeros((self.num_label, self.num_feature, self.num_hypo), dtype=int)
 
             # Create Teacher's Knowledge table Delta(g|h) based on the knowledgeability
-            self.delta_g_h = np.zeros((self.num_hypo, self.num_hypo), dtype=float)
+            self.delta_g_h = numpy.zeros((self.num_hypo, self.num_hypo), dtype=float)
 
             # Calculate the P(y|x,h)
             for i in range(self.num_feature):
@@ -36,47 +36,32 @@ class ActiveLearning:
 
             # Create the knowledgeability table
             self.delta_g_h.fill((1 - self.knowledge) / (self.num_hypo - 1))
-            np.fill_diagonal(self.delta_g_h, self.knowledge)
+            numpy.fill_diagonal(self.delta_g_h, self.knowledge)
 
             # The empty PT(x|h) table for the boundary task
-            self.p_teacher_x_h = np.zeros((self.num_feature, self.num_hypo), dtype=float)
+            self.p_teacher_x_h = numpy.zeros((self.num_feature, self.num_hypo), dtype=float)
 
             # The empty PT(x,y|h) table for the boundary task
-            self.p_teacher_xy_h = np.zeros((self.num_feature, self.num_label, self.num_hypo), dtype=float)
+            self.p_teacher_xy_h = numpy.zeros((self.num_feature, self.num_label, self.num_hypo), dtype=float)
 
             # The empty table  PL(h|x,y) for the boundary task
-            self.p_learner_h_xy = np.zeros((self.num_hypo, self.num_feature, self.num_label))
+            self.p_learner_h_xy = numpy.zeros((self.num_hypo, self.num_feature, self.num_label))
 
             # The hypothesis and feature table
-            self.hypo_table = np.zeros((self.num_hypo + 1, self.num_feature), dtype=int)
+            self.hypo_table = numpy.zeros((self.num_hypo + 1, self.num_feature), dtype=int)
             for h in range(self.num_hypo + 1): self.hypo_table[h, 0:self.num_hypo - h] = 1
 
-            self.p_h_x = np.zeros((self.num_hypo, self.num_feature), dtype=float)
-            for h in range(self.num_hypo):
-                  for x in range(self.num_feature):
-                        self.p_h_x[h, x] = 0.25
+            # The empty p_h_x table
+            self.phx = numpy.zeros((self.num_feature), dtype=float)
 
       # set the user hypothesis and to the current hypothesis table
       # automatically set the corresponding environment (e.g. variables, tables)
       def Set(self, user_hypo):
             self.hypo_table = user_hypo
-            self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h, self.p_teacher_xy_h, self.p_learner_h_xy, self.p_y_xh, self.delta_g_h = Init.Set(user_hypo, self.knowledge)
-
-      # Normal task with out knowledgeability
-      def N_Task(self, num_iteration=0):
-            self.p_learner_h_xy = Init.Initstep(self.num_hypo, self.num_feature, self.num_label, self.p_y_xh)
-            Task.Normal_Task(self.num_hypo, self.num_feature, self.num_label, self.p_teacher_xy_h, self.p_learner_h_xy, self.p_y_xh, num_iteration)
-            return
-
-      # Task with knowledgeability
-      def K_Task(self, num_iteration=0):
-            self.p_learner_h_xy = Init.Initstep(self.num_hypo, self.num_feature, self.num_label, self.p_y_xh)
-            Task.Knowledgeability_Task(self.num_hypo, self.num_feature, self.num_label, self.p_teacher_xy_h, self.p_teacher_x_h,
-                                       self.p_learner_h_xy, self.p_y_xh, self.delta_g_h, num_iteration)
-            return
+            self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h, self.p_teacher_xy_h, self.p_learner_h_xy, self.p_y_xh, self.delta_g_h, self.phx = Init.Set(user_hypo, self.knowledge)
 
       # P(get h) based on the number of observations
       def P_Task(self):
-            p = Task.Probability_Task(self.hypo_table, self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h, self.knowledge)
-            print(p)
+            p, s ,sp= Task.Probability_Task(self.hypo_table, self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h, self.knowledge)
+            print(p, s, sp, sep="\n")
             return
