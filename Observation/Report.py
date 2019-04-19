@@ -1,6 +1,17 @@
 import numpy as np
+import matplotlib.pyplot as mtp
 import copy
 
+
+def Plot_P(p_h_x, index):
+      y = p_h_x[index]
+      x = []
+      for i in range(len(y)):
+            x.append(i + 1)
+      mtp.ylabel("Probability")
+      mtp.xlabel("Observations")
+      mtp.plot(x, y)
+      mtp.show()
 
 
 def Report(number_hypo, number_feature, number_label, h_table=None, p_teacher_xy_h=None, p_y_xh=None, p_teacher_x_h=None, p_learner_h_xy=None, knowledge_delta=None, format=False):
@@ -42,28 +53,13 @@ def Report(number_hypo, number_feature, number_label, h_table=None, p_teacher_xy
       return
 
 
-def Report_to_File(file_path=None, h_table=None, p_teacher_xy_h=None, p_y_xh=None, p_teacher_x_h=None, p_learner_h_xy=None):
+def Report_to_File(file_path=None, *args):
       if file_path is None:
             f = open("result.txt", mode="a")
       else:
             f = open(file_path, mode="a")
-      if h_table is not None:
-            f.write("----- Hypothesis Table -----\n")
-            f.write(str(np.array(h_table)))
-            f.write("\n")
-      if p_teacher_xy_h is not None:
-            f.write("----- PT(x,y|h) -----\n")
-            f.write(str(p_teacher_xy_h))
-            f.write("\n")
-      if p_y_xh is not None:
-            f.write("----- P(y|x,h) -----\n")
-            f.write(str(p_y_xh))
-            f.write("\n")
-      if p_teacher_x_h is not None:
-            f.write("----- PT(x|h) -----\n")
-            f.write(str(p_teacher_x_h))
-            f.write("\n")
-      if p_learner_h_xy is not None:
-            f.write("----- PL(h|x,y) -----\n")
-            f.write(str(p_learner_h_xy))
-            f.write("\n")
+      for tables in args:
+            if tables is not None:
+                  f.write("----- Table -----\n")
+                  f.write(str(np.array(tables)))
+                  f.write("\n")

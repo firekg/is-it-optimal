@@ -25,6 +25,6 @@ def K_PLearner_h_xy(number_hypo, number_feature, number_label, p_yxh, p_leaner_h
                         for g in range(number_hypo):
                               if (p_yxh[y, x, h] == p_yxh[y, x, g]):
                                     count = count + 1
-                        p_leaner_hxy[h, x, y] = p_yxh[y, x, h] * (1 / count) * p_teacher_xh[x, y, h]
+                        p_leaner_hxy[h, x, y] = p_yxh[y, x, h] * (1 / count) * p_teacher_xh[x, h]
       Normalize.K_Norm_Learner(number_hypo, number_feature, number_label, p_leaner_hxy)
       return
