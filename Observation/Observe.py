@@ -3,8 +3,11 @@ import copy
 import numpy
 
 
+# Get the current index of the hypothesis for the new table
+# Original table: the original hypothesis table
+# New table: the new table with reduced hypothesis
+# hypo idx: the index of the hypothesis in the original table
 def Get_Index(original_table, new_table, hypo_idx):
-      # Get the current index of the p_teacher_xh
       for i in range(len(new_table)):
             if new_table[i] == original_table[hypo_idx]:
                   return i
@@ -39,5 +42,3 @@ def Observe(hypo_map, true_hypo, target_feature_idx):
             else:
                   list.append(hypo)
       return len(list), list
-
-# print(Get_Target_Feature_Set([0, 1, 2], 3))

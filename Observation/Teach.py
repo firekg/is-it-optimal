@@ -16,21 +16,6 @@ def PTeacher_xy_h(number_hypos, number_features, number_labels, table_prob_t_xy_
 
 
 # eq. 6b)
-# PT(x|h) = Sum_y Sum_g ( Pl(g|x,y) * PT(x,y) * delta(g|h) )
-# 'K' stands for the knowledgebility model
-def K_PTeacher_x_h(number_hypo, number_feature, number_label, p_teacher_xh, p_learner_h_xy, delta_gh):
-      p_teacher_xy = 1 / number_feature / number_label
-      for h in range(number_hypo):
-            for x in range(number_feature):
-                  sum = 0
-                  for y in range(number_label):
-                        for g in range(number_hypo):
-                              sum += p_learner_h_xy[g, x, y] * p_teacher_xy * delta_gh[g, h]
-                  p_teacher_xh[x, h] = sum
-      return
-
-
-# eq. 6b)
 # PT(x|g) = Sum_y  ( PL(g|x,y) * PT(x,y) )
 # 'K' stands for the knowledgebility model
 def K_PTeacher_xy_h(number_hypo, number_feature, number_label, p_teacher_xyh, p_teacher_x_h, p_learner_h_xy, delta_gh):

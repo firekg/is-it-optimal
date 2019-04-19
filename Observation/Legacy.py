@@ -1,5 +1,6 @@
 # This file contains the function that no longer used in the project
 import Normalize
+import Report
 import numpy
 import Observe
 import Init
@@ -114,3 +115,52 @@ def Get_Probability(p_teacher_x_h, target_hypo, target_feature_set):
       for feature in target_feature_set:
             list.append(p_teacher_x_h[feature, target_hypo])
       return numpy.sum(list)
+
+
+# Print the table to the console or a text file
+def ReportTable(self, hypo_table=True, p_teacher_xy_h=False, p_y_xh=False, p_teacher_x_h=True, p_learner_h_xy=True, format=False, textcopy=False):
+      Report.Report(self.num_hypo, self.num_feature, self.num_label,
+                    self.hypo_table if hypo_table == True else None,
+                    self.p_teacher_xy_h if p_teacher_xy_h == True else None,
+                    self.p_y_xh if p_y_xh == True else None,
+                    self.p_teacher_x_h if p_teacher_x_h == True else None,
+                    self.p_learner_h_xy if p_learner_h_xy == True else None, None)
+      if textcopy:
+            Report.Report_to_File(self.hypo_table if hypo_table == True else None,
+                                  self.p_teacher_xy_h if p_teacher_xy_h == True else None,
+                                  self.p_y_xh if p_y_xh == True else None,
+                                  self.p_teacher_x_h if p_teacher_x_h == True else None,
+                                  self.p_learner_h_xy if p_learner_h_xy == True else None)
+
+
+# eq. 6b)
+# PT(x|h) = Sum_y Sum_g ( Pl(g|x,y) * PT(x,y) * delta(g|h) )
+# 'K' stands for the knowledgebility model
+def K_PTeacher_x_h(number_hypo, number_feature, number_label, p_teacher_xh, p_learner_h_xy, delta_gh):
+      p_teacher_xy = 1 / number_feature / number_label
+      for h in range(number_hypo):
+            for x in range(number_feature):
+                  sum = 0
+                  for y in range(number_label):
+                        for g in range(number_hypo):
+                              sum += p_learner_h_xy[g, x, y] * p_teacher_xy * delta_gh[g, h]
+                  p_teacher_xh[x, h] = sum
+      return
+
+
+# Hypo list --> Hypo map
+# Key: hypothesis
+# Value: index
+def Transform_to_Map(hypo_list):
+      h = { }
+      for hypo in range(len(hypo_list)):
+            h[tuple(hypo_list[hypo])] = hypo
+      return h
+
+
+# Hypo map --> Hypo list
+def Transform_to_List(hypo_map):
+      h = []
+      for hypo in hypo_map:
+            h.append(hypo)
+      return h

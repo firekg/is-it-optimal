@@ -7,12 +7,12 @@ import Teach
 import Learn
 
 
-def Normal_Task(loopstep=0, hypo=None, feature=None, label=None, p_teacher_xy_h=None, p_learner_h_xy=None, p_y_xh=None):
-
+# Eq. 5a), 5b)
+def Normal_Task(hypo, feature, label, p_teacher_xy_h, p_learner_h_xy, p_y_xh, num_iteration=0):
       Normalize.Norm_Learner(hypo, feature, label, p_learner_h_xy)
       Teach.PTeacher_xy_h(hypo, feature, label, p_teacher_xy_h, p_learner_h_xy)
       Normalize.Norm_Teacher(hypo, feature, label, p_teacher_xy_h)
-      for x in range(loopstep):
+      for x in range(num_iteration):
             Learn.PLearner_h_xy(hypo, feature, label, p_learner_h_xy, p_y_xh, p_teacher_xy_h)
             Normalize.Norm_Learner(hypo, feature, label, p_learner_h_xy)
             Teach.PTeacher_xy_h(hypo, feature, label, p_teacher_xy_h, p_learner_h_xy)
@@ -21,10 +21,10 @@ def Normal_Task(loopstep=0, hypo=None, feature=None, label=None, p_teacher_xy_h=
 
 
 # Eq. 6a), 6b)
-def Knowledgeability_Task(loopstep=0, hypo=None, feature=None, label=None, p_teacher_xy_h=None, p_teacher_x_h=None, p_learner_h_xy=None, p_y_xh=None, delta_g_h=None):
+def Knowledgeability_Task(hypo, feature, label, p_teacher_xy_h, p_teacher_x_h, p_learner_h_xy, p_y_xh, delta_g_h, num_iteration=0):
       Normalize.K_Norm_Learner(hypo, feature, label, p_learner_h_xy)
       Teach.K_PTeacher_xy_h(hypo, feature, label, p_teacher_xy_h, p_teacher_x_h, p_learner_h_xy, delta_g_h)
-      for loop in range(loopstep):
+      for loop in range(num_iteration):
             # Calculate learner's table
             Learn.K_PLearner_h_xy(hypo, feature, label, p_y_xh, p_learner_h_xy, p_teacher_xy_h)
 
@@ -56,7 +56,7 @@ def Probability_Task(hypo_table, number_hypo, number_feature, number_label, p_te
                   num_hypo, num_feature, num_label, p_teacher_x_h, p_teacher_xy_h, p_learner_h_xy, p_y_xh, delta_g_h = Init.Set(hypo_map_copy, knowledgeability=knowledgeability)
                   # Get the PT
                   p_learner_h_xy = Init.Initstep(num_hypo, num_feature, num_label, p_y_xh)
-                  Knowledgeability_Task(500, num_hypo, num_feature, num_label, p_teacher_xy_h, p_teacher_x_h, p_learner_h_xy, p_y_xh, delta_g_h)
+                  Knowledgeability_Task(num_hypo, num_feature, num_label, p_teacher_xy_h, p_teacher_x_h, p_learner_h_xy, p_y_xh, delta_g_h, 500)
 
                   # Choose a feature
                   new_hypo_idx = Observe.Get_Index(hypo_table, hypo_map_copy, hypo_idx)
@@ -71,21 +71,3 @@ def Probability_Task(hypo_table, number_hypo, number_feature, number_label, p_te
                         prob_map[hypo_idx] = prob
                         break
       return prob_map
-
-
-# Hypo list --> Hypo map
-# Key: hypothesis
-# Value: index
-def Transform_to_Map(hypo_list):
-      h = { }
-      for hypo in range(len(hypo_list)):
-            h[tuple(hypo_list[hypo])] = hypo
-      return h
-
-
-# Hypo map --> Hypo list
-def Transform_to_List(hypo_map):
-      h = []
-      for hypo in hypo_map:
-            h.append(hypo)
-      return h
