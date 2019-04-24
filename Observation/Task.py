@@ -54,13 +54,9 @@ def Probability_Task(hypo_table, number_hypo, number_feature, number_label, p_te
                   prob.append(prob_find)
                   select.append(feature)
                   # Assign the p_learner_h_xy to phx
-                  print(hypo_idx, obs)
-                  print(p_teacher_x_h)
-                  print(p_learner_h_xy)
 
                   for h in range(number_hypo):
                         phx[h] = p_learner_h_xy[h][feature][true_label]
-                  print(phx, end="\n\n\n")
                   # remove the feature in the feature set,
                   # make the same feature only be observed once
                   feature_set.remove(feature)

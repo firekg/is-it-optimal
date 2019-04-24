@@ -17,8 +17,8 @@ def Get_Index(original_table, new_table, hypo_idx):
 # observable_feature_set: the set that contains all select-able features
 # hypo: current true hypo
 def Get_Feature(observable_feature_set, hypo_idx, p_teacher_xh):
-      mx_value = p_teacher_xh[observable_feature_set[0], hypo_idx]
       mx_idx = observable_feature_set[0]
+      mx_value = p_teacher_xh[mx_idx, hypo_idx]
       for feature in observable_feature_set:
             if p_teacher_xh[feature, hypo_idx] > mx_value:
                   mx_value = p_teacher_xh[feature, hypo_idx]
