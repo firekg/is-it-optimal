@@ -1,4 +1,5 @@
 import numpy
+import matplotlib.pyplot as mtp
 import Normalize
 import Init
 import Observe
@@ -62,6 +63,11 @@ class ActiveLearning:
 
       # P(get h) based on the number of observations
       def P_Task(self):
-            p, s ,sp= Task.Probability_Task(self.hypo_table, self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h, self.knowledge)
-            print(p, s, sp, sep="\n")
+            knowledgeability = 0.3
+            p, s = Task.Probability_Task(self.hypo_table, self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h, knowledgeability)
+            print(p,s)
+                  #p = Task.Average_Hypo(p, self.num_hypo, self.num_feature)
+                  #Report.Plot_P(p, self.num_feature)
+                  #knowledgeability += 0.1
+            #mtp.show()
             return

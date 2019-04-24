@@ -3,15 +3,13 @@ import matplotlib.pyplot as mtp
 import copy
 
 
-def Plot_P(p_h_x, index):
-      y = p_h_x[index]
-      x = []
-      for i in range(len(y)):
-            x.append(i + 1)
+def Plot_P(p, number_observations):
       mtp.ylabel("Probability")
       mtp.xlabel("Observations")
-      mtp.plot(x, y)
-      mtp.show()
+      x =[]
+      for i in range(number_observations):
+            x.append(i + 1)
+      mtp.plot(x, p)
 
 
 def Report(number_hypo, number_feature, number_label, h_table=None, p_teacher_xy_h=None, p_y_xh=None, p_teacher_x_h=None, p_learner_h_xy=None, knowledge_delta=None, format=False):

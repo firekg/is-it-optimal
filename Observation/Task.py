@@ -26,7 +26,6 @@ def Knowledgeability_Task(hypo, feature, label, p_teacher_xy_h, p_teacher_x_h,
 def Probability_Task(hypo_table, number_hypo, number_feature, number_label, p_teacher_x_h, knowledgeability, iter=100):
       prob_map = { }
       select_map = { }
-      select_probability = { }
       feature_set = []
 
       # Assume there is a true hypo = hypo
@@ -39,7 +38,6 @@ def Probability_Task(hypo_table, number_hypo, number_feature, number_label, p_te
             obs = 0
             prob = []
             select = []
-            select_p = []
 
             # Set the environment
             num_hypo, num_feature, num_label, p_teacher_x_h, p_teacher_xy_h, p_learner_h_xy, p_y_xh, delta_g_h, phx = Init.Set(hypo_table, knowledgeability=knowledgeability)
@@ -55,17 +53,29 @@ def Probability_Task(hypo_table, number_hypo, number_feature, number_label, p_te
                   prob_find, true_label = Observe.Observe(hypo_table, hypo_idx, feature, p_learner_h_xy)
                   prob.append(prob_find)
                   select.append(feature)
-                  select_p.append(p_teacher_x_h[feature][hypo_idx])
                   # Assign the p_learner_h_xy to phx
+                  print(hypo_idx, obs)
+                  print(p_teacher_x_h)
+                  print(p_learner_h_xy)
+
                   for h in range(number_hypo):
                         phx[h] = p_learner_h_xy[h][feature][true_label]
-
+                  print(phx, end="\n\n\n")
                   # remove the feature in the feature set,
                   # make the same feature only be observed once
                   feature_set.remove(feature)
                   if len(feature_set) == 0:
                         prob_map[hypo_idx] = prob
                         select_map[hypo_idx] = select
-                        select_probability[hypo_idx] =select_p
                         break
-      return prob_map, select_map, select_probability
+      return prob_map, select_map
+
+
+def Average_Hypo(prob_map, number_hypos, number_observations):
+      y = []
+      for obs in range(number_observations):
+            sum = 0
+            for hypo_index in prob_map:
+                  sum += prob_map[hypo_index][obs]
+            y.append(sum / number_hypos)
+      return y
