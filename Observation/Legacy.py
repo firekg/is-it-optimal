@@ -1,5 +1,4 @@
 # This file contains the function that no longer used in the project
-import Normalize
 import Report
 import numpy
 import Observe

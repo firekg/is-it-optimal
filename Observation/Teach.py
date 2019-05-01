@@ -1,25 +1,42 @@
-import numpy as np
-import Normalize
+import numpy
 
 
 # eq. 6b)
 # PT(x|g) = Sum_y  ( PL(g|x,y) * PT(x,y) )
 # 'K' stands for the knowledgebility model
-def K_PTeacher_xh(number_hypo, number_feature, number_label, p_teacher_xyh, p_teacher_x_h, p_learner_h_xy, delta_gh):
+def K_PTeacher_xh(number_hypo, number_feature, number_label, p_teacher_xy_h, p_teacher_x_h, p_learner_h_xy, delta_gh):
       ptxy = 1 / number_feature / number_label
-      temp_p_teacher_xy_h = np.zeros((number_feature, number_label, number_hypo), dtype=float)
+      temp_p_teacher_xy_h = numpy.zeros((number_feature, number_label, number_hypo), dtype=float)
 
       for h in range(number_hypo):
             for x in range(number_feature):
                   for y in range(number_label):
-                        p_teacher_xyh[x, y, h] = p_learner_h_xy[h, x, y] * ptxy
-      Normalize.Norm_Teacher(number_hypo, number_feature, number_label, p_teacher_xyh)
-      temp_teacher_x_h = np.sum(p_teacher_xyh, axis=1)
+                        p_teacher_xy_h[x, y, h] = p_learner_h_xy[h, x, y] * ptxy
+
+      # **** Normalization ****
+      Norm_table = numpy.sum(p_teacher_xy_h, axis=(0, 1))
+      for h in range(number_hypo):
+            for x in range(number_feature):
+                  for y in range(number_label):
+                        if (Norm_table[h] == 0):
+                              continue
+                        p_teacher_xy_h[x, y, h] /= Norm_table[h]
+      # **** Normalization Ends ****
+
+      temp_teacher_x_h = numpy.sum(p_teacher_xy_h, axis=1)
       for h in range(number_hypo):
             for x in range(number_feature):
                   sum = 0
                   for g in range(number_hypo):
                         sum += temp_teacher_x_h[x, g] * delta_gh[g, h]
                   p_teacher_x_h[x, h] = sum
-      Normalize.Norm_Teacher_X(number_hypo, number_feature, number_label, p_teacher_x_h)
+
+      # **** Normalization ****
+      Norm_x = numpy.sum(p_teacher_x_h, axis=0)
+      for h in range(number_hypo):
+            for x in range(number_feature):
+                  if (Norm_x[h] == 0):
+                        continue
+                  p_teacher_x_h[x, h] /= Norm_x[h]
+      # **** Normalization Ends ****
       return

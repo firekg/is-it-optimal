@@ -1,17 +1,6 @@
 import numpy
 
 
-# When the equation 5a) and 5b) are applied
-# Initial step will be PL(h|xy) = P(y|x,h) PL(h)
-def Initstep(number_hypos, number_features, number_labels, p_y_xh, phx):
-      p_l_h_xy = numpy.zeros((number_hypos, number_features, number_labels), dtype=float)
-      for x in range(number_features):
-            for y in range(number_labels):
-                  for h in range(number_hypos):
-                        p_l_h_xy[h, x, y] = p_y_xh[y, x, h] * phx[h] / number_hypos
-      return p_l_h_xy
-
-
 # Set a user defined hypothesis
 # Return:
 #        num_hypo: number of hypothesis

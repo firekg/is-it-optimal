@@ -1,6 +1,5 @@
 import numpy
 import matplotlib.pyplot as mtp
-import Normalize
 import Init
 import Observe
 import Task
@@ -62,13 +61,6 @@ class ActiveLearning:
             self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h, self.p_teacher_xy_h, self.p_learner_h_xy, self.p_y_xh, self.delta_g_h, self.phx = Init.Set(user_hypo, self.knowledge)
 
       # P(get h) based on the number of observations
-      def P_Task(self, bottom, upper, stepsize):
-            knowledgeability = bottom
-            while knowledgeability <= upper:
-                  p, s = Task.Probability_Task(self.hypo_table, self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h, knowledgeability)
-                  print(p, s, sep="\n")
-                  p = Task.Average_Hypo(p, self.num_hypo, self.num_feature)
-                  Report.Plot_P(p, self.num_feature)
-                  knowledgeability += stepsize
-            mtp.show()
+      def P_Task(self):
+            print(Task.Probability_Task(self.hypo_table, self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h, self.knowledge))
             return
