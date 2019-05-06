@@ -7,4 +7,4 @@ def Plot_P(p, number_observations, obs_index):
       x = []
       for i in range(number_observations):
             x.append(i + 1)
-      mtp.plot(x, p, label = str(obs_index+1))
+      mtp.plot(x, p, label = "n="+str(obs_index))

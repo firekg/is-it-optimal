@@ -1,6 +1,6 @@
 import numpy
 import Observe
-import Init
+import Set
 import copy
 import Teach
 import Learn
@@ -10,11 +10,17 @@ import Learn
 def Knowledgeability_Task(hypo, feature, label, p_teacher_xy_h, p_teacher_x_h, p_y_xh, delta_g_h, phx, num_iteration):
       p_learner_h_xy = Learn.Init_step(hypo, feature, label, p_y_xh, phx)
       Teach.K_PTeacher_xh(hypo, feature, label, p_teacher_xy_h, p_teacher_x_h, p_learner_h_xy, delta_g_h)
+      temp_p_teacher_x_h = numpy.copy(p_teacher_x_h)
       for loop in range(num_iteration):
+            # Check the convergence every 10 loops (reduce the time on copy arrays)
+            if loop % 10 == 0: temp_p_teacher_x_h = numpy.copy(p_teacher_x_h)
             # Calculate learner's table
             Learn.K_PLearner_h_xy(hypo, feature, label, p_y_xh, p_learner_h_xy, p_teacher_x_h, phx)
             # Calculate teacher's table
             Teach.K_PTeacher_xh(hypo, feature, label, p_teacher_xy_h, p_teacher_x_h, p_learner_h_xy, delta_g_h)
+            if loop % 10 == 0:
+                  # If converged, stop the iteration
+                  if numpy.array_equal(p_teacher_x_h, temp_p_teacher_x_h): break
       return p_learner_h_xy
 
 
@@ -39,7 +45,7 @@ def NKnowledgeability_Task(hypo_table, number_hypo, number_feature, number_label
             obs = 0
 
             # Set the environment
-            num_hypo, num_feature, num_label, p_teacher_x_h, p_teacher_xy_h, p_learner_h_xy, p_y_xh, delta_g_h, phx = Init.Set(hypo_table, None, knowledgeability=knowledgeability)
+            num_hypo, num_feature, num_label, p_teacher_x_h, p_teacher_xy_h, p_learner_h_xy, p_y_xh, delta_g_h, phx = Set.Set(hypo_table, None, knowledgeability=knowledgeability)
             while True:
 
                   for h in range(number_hypo):
@@ -70,7 +76,7 @@ def NKnowledgeability_Task(hypo_table, number_hypo, number_feature, number_label
 
 # hypo_map: The map of the hypothesis
 # return: a map from hypothesis to observation * probability
-def Probability_Task(hypo_table, number_hypo, number_feature, number_label, k_table, iter=100):
+def Probability_Task(hypo_table, number_hypo, number_feature, number_label, k_table, iter):
       prob_map = { }
       select_map = { }
       feature_set = []
@@ -88,7 +94,7 @@ def Probability_Task(hypo_table, number_hypo, number_feature, number_label, k_ta
 
             # Set the environment
             # Since we have the knowledgeability table, the knowledgeability argument will be ignored
-            num_hypo, num_feature, num_label, p_teacher_x_h, p_teacher_xy_h, p_learner_h_xy, p_y_xh, delta_g_h, phx = Init.Set(hypo_table, k_table, knowledgeability=1)
+            num_hypo, num_feature, num_label, p_teacher_x_h, p_teacher_xy_h, p_learner_h_xy, p_y_xh, delta_g_h, phx = Set.Set(hypo_table, k_table, knowledgeability=1)
             while True:
 
                   # Get the PT

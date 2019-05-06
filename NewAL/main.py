@@ -1,6 +1,7 @@
 import AL
 import Generate
 
-task = AL.ActiveLearning(knowledgeability=1 / 7)
-task.Set(user_hypo=Generate.Generate_Boundary_Hypo_Table(6, True))
+hypo = Generate.Zigzag_Hypo_Table(7, False)
+task = AL.ActiveLearning(knowledgeability=1 / len(hypo))
+task.Set(user_hypo=hypo)
 task.P_Task()
