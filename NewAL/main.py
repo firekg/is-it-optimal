@@ -1,7 +1,8 @@
 import AL
 import Generate
+import Const
 
-hypo = Generate.Zigzag_Hypo_Table(7, False)
-task = AL.ActiveLearning(knowledgeability=1 / len(hypo))
-task.Set(user_hypo=hypo)
-task.P_Task()
+hypo = Generate.Uniform_Hypo_Table(1, False)
+task = AL.ActiveLearning(knowledgeability=1)
+task.Set(user_hypo=Const.user_hypo_table)
+task.O_Task()

@@ -61,14 +61,15 @@ class ActiveLearning:
             self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h, self.p_teacher_xy_h, self.p_learner_h_xy, self.p_y_xh, self.delta_g_h, self.phx = Set.Set(user_hypo, None,
                                                                                                                                                                            self.knowledge)
 
-      def P_Task(self):
+      # Observation task
+      def O_Task(self):
             # Get a new knowledgeability table
-            knowledgeability = Task.NKnowledgeability_Task(self.hypo_table, self.num_hypo, self.num_feature, self.num_label, self.knowledge)
-
+            # knowledgeability = Task.NKnowledgeability_Task(self.hypo_table, self.num_hypo, self.num_feature, self.num_label, self.knowledge)
+            knowledgeability = [self.delta_g_h]
             for n in range(len(knowledgeability)):
                   print(knowledgeability[n])
                   p, s = Task.Probability_Task(self.hypo_table, self.num_hypo, self.num_feature, self.num_label, copy.deepcopy(knowledgeability[n]), 1000)
-                  print(p,s,sep = "\n")
+                  print(p, s, sep="\n")
                   Report.Plot_P(Task.Average_Hypo(p, self.num_hypo), self.num_feature, n)
 
                   # If reaches the identitly matrix, the loop will be ended
