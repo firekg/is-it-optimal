@@ -66,3 +66,10 @@ def Zigzag_Hypo_Table(number_features, printout=False):
             table[i][i - 1 if i - 1 >= 0 else 0: i + 1 if i + 1 <= number_features else number_features] = 1
       if printout: print(table)
       return list(table)
+
+
+def Transfer_User_Table(user_hypothesis_table, coding_map):
+      for a in range(len(user_hypothesis_table)):
+            sz = len(user_hypothesis_table[a])
+            for i in range(sz):
+                  user_hypothesis_table[a][i] = coding_map[user_hypothesis_table[a][i]]

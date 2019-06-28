@@ -1,6 +1,7 @@
 import numpy
 import matplotlib.pyplot as mtp
 import Set
+import Sample
 import Observe
 import Task
 import Report
@@ -64,8 +65,8 @@ class ActiveLearning:
       # Observation task
       def O_Task(self):
             # Get a new knowledgeability table
-            # knowledgeability = Task.NKnowledgeability_Task(self.hypo_table, self.num_hypo, self.num_feature, self.num_label, self.knowledge)
-            knowledgeability = [self.delta_g_h]
+            knowledgeability = Task.NKnowledgeability_Task(self.hypo_table, self.num_hypo, self.num_feature, self.num_label, self.knowledge)
+            # knowledgeability = [self.delta_g_h]
             for n in range(len(knowledgeability)):
                   print(knowledgeability[n])
                   p, s = Task.Probability_Task(self.hypo_table, self.num_hypo, self.num_feature, self.num_label, copy.deepcopy(knowledgeability[n]), 1000)
@@ -76,4 +77,29 @@ class ActiveLearning:
                   if numpy.array_equal(knowledgeability[n], numpy.eye(self.num_hypo)): break
             mtp.legend()
             mtp.show()
+            return
+
+      # Data Sampling task
+      def DS_Task(self):
+            # Get a new knowledgeability table
+            # knowledgeability = Sample.Random_K(self.num_hypo, 5000)
+            knowledgeability = Sample.Pattern_Diagonal_K(self.num_hypo, 0.01)
+            # maxK = knowledgeability[0]
+            # maxP = 0
+
+            for n in range(len(knowledgeability)):
+                  p = Sample.Sample_P(self.hypo_table, self.num_hypo, self.num_feature, self.num_label, copy.deepcopy(knowledgeability[n]), 750)
+                  # print(knowledgeability[n], p, sep="\n", end="\n\n")
+
+                  # write it to a file
+                  f = open("result.csv", mode="a")
+                  for line in knowledgeability[n]:
+                        f.write(str(line))
+                        f.write(",")
+                  f.write(",")
+                  f.write(str(p))
+                  f.write("\n")
+
+            # print(maxK, maxP, sep="\n", end="\n\n")
+            print("Task finished")
             return

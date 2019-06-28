@@ -44,10 +44,12 @@ def Set(user_hypo_map, delta_table=None, knowledgeability=1.0):
             delta_g_h = numpy.zeros((num_hypo, num_hypo), dtype=float)
             delta_g_h.fill((1 - knowledgeability) / (num_hypo - 1) if num_hypo > 1 else 1)
             numpy.fill_diagonal(delta_g_h, knowledgeability)
+      else:
+            delta_g_h = delta_table
 
       p_teacher_x_h = numpy.zeros((num_feature, num_hypo), dtype=float)
       p_teacher_xy_h = numpy.zeros((num_feature, num_label, num_hypo), dtype=float)
       p_learner_h_xy = numpy.zeros((num_hypo, num_feature, num_label))
 
-      print(delta_table)
+      #print(delta_table)
       return num_hypo, num_feature, num_label, p_teacher_x_h, p_teacher_xy_h, p_learner_h_xy, p_y_xh, delta_g_h, phx

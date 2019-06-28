@@ -30,6 +30,9 @@ def Get_Feature(observable_feature_set, hypo_idx, p_teacher_xh):
 # hypo_map: the set of all hypothesis
 # true_hypo: the true hypo
 # target_feature: the target features we want to observe
+# return:
+#      the probability of finding the true hypothesis
+#      the label of the feature
 def Observe(hypo_map, true_hypo_idx, target_feature_idx, p_learner_h_xy):
       list = []
       # Get the true label

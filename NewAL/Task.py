@@ -7,20 +7,31 @@ import Learn
 
 
 # Eq. 6a), 6b)
+# Do the task with convergence check
+# If the task converges, the iteration will stop
 def Knowledgeability_Task(hypo, feature, label, p_teacher_xy_h, p_teacher_x_h, p_y_xh, delta_g_h, phx, num_iteration):
       p_learner_h_xy = Learn.Init_step(hypo, feature, label, p_y_xh, phx)
       Teach.K_PTeacher_xh(hypo, feature, label, p_teacher_xy_h, p_teacher_x_h, p_learner_h_xy, delta_g_h)
       temp_p_teacher_x_h = numpy.copy(p_teacher_x_h)
-      for loop in range(num_iteration):
+      loop = 0
+      while True:
+
             # Check the convergence every 10 loops (reduce the time on copy arrays)
             if loop % 10 == 0: temp_p_teacher_x_h = numpy.copy(p_teacher_x_h)
+
             # Calculate learner's table
             Learn.K_PLearner_h_xy(hypo, feature, label, p_y_xh, p_learner_h_xy, p_teacher_x_h, phx)
+
             # Calculate teacher's table
             Teach.K_PTeacher_xh(hypo, feature, label, p_teacher_xy_h, p_teacher_x_h, p_learner_h_xy, delta_g_h)
+
+            loop += 1
             if loop % 10 == 0:
                   # If converged, stop the iteration
                   if numpy.array_equal(p_teacher_x_h, temp_p_teacher_x_h): break
+
+            # End the loop by checking the number of iterations
+            if loop > num_iteration: break
       return p_learner_h_xy
 
 
@@ -79,16 +90,19 @@ def NKnowledgeability_Task(hypo_table, number_hypo, number_feature, number_label
 def Probability_Task(hypo_table, number_hypo, number_feature, number_label, k_table, iter):
       prob_map = { }
       select_map = { }
-      feature_set = []
+      const_feature_set = []
+
+      # Append all observable features to the feature set
+      for f in range(number_feature):
+            const_feature_set.append(f)
 
       # Assume there is a true hypo = hypo
       # Get all posible hypothesis in the hypo map
       for hypo_idx in range(len(hypo_table)):
 
-            # Get the observable feature set
-            for f in range(number_feature):
-                  feature_set.append(f)
-            obs = 0
+            # Make a copy to save time
+            feature_set = copy.deepcopy(const_feature_set)
+
             prob = []
             select = []
 
@@ -99,16 +113,18 @@ def Probability_Task(hypo_table, number_hypo, number_feature, number_label, k_ta
 
                   # Get the PT
                   p_learner_h_xy = Knowledgeability_Task(num_hypo, num_feature, num_label, p_teacher_xy_h, p_teacher_x_h, p_y_xh, k_table, phx, iter)
-                  # Choose a feature
+
+                  # Pick the feature with the highest PT
                   feature = Observe.Get_Feature(feature_set, hypo_idx, p_teacher_x_h)
-                  obs += 1
+
                   prob_find, true_label = Observe.Observe(hypo_table, hypo_idx, feature, p_learner_h_xy)
                   prob.append(prob_find)
                   select.append(feature)
-                  # Assign the p_learner_h_xy to phx
 
+                  # Assign the p_learner_h_xy to phx
                   for h in range(number_hypo):
                         phx[h] = p_learner_h_xy[h][feature][true_label]
+
                   # remove the feature in the feature set,
                   # make the same feature only be observed once
                   feature_set.remove(feature)
