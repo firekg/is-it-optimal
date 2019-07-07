@@ -83,7 +83,7 @@ class ActiveLearning:
       def DS_Task(self):
             # Get a new knowledgeability table
             # knowledgeability = Sample.Random_K(self.num_hypo, 5000)
-            knowledgeability = Sample.Pattern_Diagonal_K(self.num_hypo, 0.01)
+            knowledgeability = Sample.Pattern_Cube_K(self.num_hypo, 4)
             # maxK = knowledgeability[0]
             # maxP = 0
 

@@ -7,7 +7,7 @@ import Const
 task = AL.ActiveLearning(knowledgeability=1)
 
 Generate.Transfer_User_Table(Const.user_hypo_table, Const.label_map)
-print(Const.user_hypo_table)
+print(Const.user_hypo_table)P
 task.Set(user_hypo=Const.user_hypo_table)
 task.O_Task()
 '''
