@@ -27,7 +27,7 @@ for true_idx in range(total_hypos):
     print("True hypothesis = ", true_hypo)
 
     maximum = 0
-    route = obs_list[0]
+    route = []
     for obs in obs_list:
         print("List = ", obs)
         # The observed feature list
@@ -44,8 +44,12 @@ for true_idx in range(total_hypos):
                 print("discarded")
                 break
             idx += 1
-        if sum > maximum:
-            route = obs
+        
+        # Update the best routes
+        if sum == maximum:
+            route.append(obs)
+        elif sum > maximum:
+            route = [obs]
             maximum = sum
     best_route[tuple(true_hypo)] = route
 
