@@ -16,7 +16,6 @@ for x in range(total_features):
 
 obs_list = []
 Utility.Permutation(arr, total_features, total_features, obs_list)
-print(obs_list)
 
 for true_idx in range(total_features):
     true_hypo = hypo[1]
@@ -30,6 +29,6 @@ for true_idx in range(total_features):
         # Start to observe
         while idx < total_features:
             obsd_list.append(obs[idx])
-            print("Observed = ", obsd_list, "  P = ",
-                  Utility.Observe(hypo, true_hypo, obsd_list))
+            P = Utility.Observe(hypo, true_hypo, obsd_list)
+            print("Observed = ", obsd_list, "  P = ", P)
             idx += 1
