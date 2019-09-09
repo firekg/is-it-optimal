@@ -17,6 +17,7 @@ for x in range(total_features):
 
 obs_list = []
 Utility.Permutation(arr, total_features, total_features, obs_list)
+print(obs_list)
 
 best_route = {}
 
@@ -37,8 +38,11 @@ for true_idx in range(total_hypos):
         while idx < total_features:
             obsd_list.append(obs[idx])
             P = Utility.Observe(hypo, true_hypo, obsd_list)
-            sum += P
             print("Observed = ", obsd_list, "  P = ", P)
+            sum += P
+            if sum + 1 * (total_features - 1 - idx) < maximum:
+                print("discarded")
+                break
             idx += 1
         if sum > maximum:
             route = obs
