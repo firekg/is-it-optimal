@@ -11,46 +11,51 @@ hypo = Generate.Boundary_Hypo_Table(total_features, True)
 total_hypos = len(hypo)
 
 # Create the observation list
-arr = numpy.empty(total_features, dtype=int)
+arr = ""
 for x in range(total_features):
-    arr[x] = x
+    arr += str(x)
 
-obs_list = []
-Utility.Permutation(arr, total_features, total_features, obs_list)
+obs_list = numpy.array(list(Utility.Permutation(arr)), dtype=int)
 print(obs_list)
 
-best_route = {}
+best_route={}
+
+# Count how many observations
+counting=0
 
 for true_idx in range(total_hypos):
     # Create the true hypo
-    true_hypo = hypo[true_idx]
+    true_hypo=hypo[true_idx]
     print("True hypothesis = ", true_hypo)
 
-    maximum = 0
-    route = []
+    maximum=0
+    route=[]
     for obs in obs_list:
         print("List = ", obs)
         # The observed feature list
-        obsd_list = []
-        idx = 0
-        sum = 0
+        obsd_list=[]
+        idx=0
+        sum=0
         # Start to observe
         while idx < total_features:
             obsd_list.append(obs[idx])
-            P = Utility.Observe(hypo, true_hypo, obsd_list)
+            counting += 1
+            P=Utility.Observe(hypo, true_hypo, obsd_list)
             print("Observed = ", obsd_list, "  P = ", P)
             sum += P
             if sum + 1 * (total_features - 1 - idx) < maximum:
                 print("discarded")
                 break
             idx += 1
-        
+
         # Update the best routes
         if sum == maximum:
             route.append(obs)
         elif sum > maximum:
-            route = [obs]
-            maximum = sum
-    best_route[tuple(true_hypo)] = route
+            route=[obs]
+            maximum=sum
+    best_route[tuple(true_hypo)]=route
 
+# Report
+print("Total observations:", counting)
 print(best_route)
