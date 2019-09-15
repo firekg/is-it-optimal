@@ -10,9 +10,7 @@ x = numpy.array(range(num_feature))
 
 for a in range(num_feature):
     t = numpy.random.randint(0, num_feature)
-    temp = x[t]
-    x[t] = x[a]
-    x[a] = temp
+    x[t], x[a] = x[a], x[t]
 print(x)
 
 

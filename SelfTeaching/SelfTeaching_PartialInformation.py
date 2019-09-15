@@ -10,14 +10,13 @@ hypo_table = Generate.Boundary_Hypo_Table(num_feature)
 num_hypo = len(hypo_table)
 knowledgeability = 1/num_hypo
 
-# Create the instance
+'''Create the instance'''
 task = AL.ActiveLearning()
 
-# Set the environment for the task
+'''Set the environment for the task'''
 task.Set(user_hypo=hypo_table, knowledgeability=knowledgeability)
 
-# task.DS_Task_With_FileOutput()
-S = task.P_Task(knowledgeability)
+S = task.P_Task()
 
 x = []
 for ki in S:
@@ -35,7 +34,7 @@ for tr in range(num_hypo):
     print("temp",temp)
     for idx in range(observation_steps):
         '''Search for the matching'''
-        c_idx = x[tr][idx]  # The current feature index
+        c_idx = x[tr][idx]    # The current feature index
         c_label = true_hypo[c_idx]
         for i in range(num_hypo):
             if c_label != hypo_table[i][c_idx]:
@@ -47,3 +46,5 @@ for tr in range(num_hypo):
         k_matrix[tr][m] = 1 / len(temp)
 
 print(k_matrix)
+
+S = task.P_Task(k_matrix)

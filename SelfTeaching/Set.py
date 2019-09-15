@@ -1,5 +1,4 @@
 import numpy
-import Const
 
 
 # Set a user defined hypothesis
@@ -10,27 +9,22 @@ import Const
 #        p_teacher_x_h: PT(x|h)
 #        p_teacher_xy_h: PT(x,y|h)
 def Set(user_hypo_map, delta_table=None, knowledgeability=1.0):
-      num_hypo = len(user_hypo_map) if Const.num_hypo is None else Const.num_hypo
-      num_feature = len(user_hypo_map[0]) if Const.num_feature is None else Const.num_feature
-      if Const.num_label is None:
-            list = []
-            for hypo in user_hypo_map:
-                  for feature in hypo:
-                        if feature not in list:
-                              list.append(feature)
-            num_label = len(list)
-      else:
-            num_label = Const.num_label
+      num_hypo = len(user_hypo_map)
+      num_feature = len(user_hypo_map[0])
+      list = []
+      for hypo in user_hypo_map:
+            for feature in hypo:
+                  if feature not in list:
+                        list.append(feature)
+      num_label = len(list)
+
 
       # if the variable is not defined in const.py
-      if Const.p_y_xh is None:
-            p_y_xh = numpy.empty((num_label, num_feature, num_hypo), dtype=float)
-            for h in range(num_hypo):
-                  for x in range(num_feature):
-                        for y in range(num_label):
-                              p_y_xh[y, x, h] = 1.0 if user_hypo_map[h][x] == y else 0.0
-      else:
-            p_y_xh = numpy.array(Const.p_y_xh)
+      p_y_xh = numpy.empty((num_label, num_feature, num_hypo), dtype=float)
+      for h in range(num_hypo):
+            for x in range(num_feature):
+                  for y in range(num_label):
+                        p_y_xh[y, x, h] = 1.0 if user_hypo_map[h][x] == y else 0.0
 
       phx = numpy.empty((num_hypo), dtype=float)
       for h in range(num_hypo):
