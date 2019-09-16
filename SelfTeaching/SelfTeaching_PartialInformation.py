@@ -16,7 +16,7 @@ task = AL.ActiveLearning()
 '''Set the environment for the task'''
 task.Set(user_hypo=hypo_table, knowledgeability=knowledgeability)
 
-S = task.P_Task()
+S = AL.P_Task(num_feature, hypo_table, K=task.delta_g_h)
 
 x = []
 for ki in S:
@@ -31,7 +31,7 @@ for tr in range(num_hypo):
     print(true_hypo)
 
     temp = list(range(num_hypo))
-    print("temp",temp)
+    print("temp", temp)
     for idx in range(observation_steps):
         '''Search for the matching'''
         c_idx = x[tr][idx]    # The current feature index
@@ -40,11 +40,11 @@ for tr in range(num_hypo):
             if c_label != hypo_table[i][c_idx]:
                 if i in temp:
                     temp.remove(i)
-    
+
     print(temp)
     for m in temp:
         k_matrix[tr][m] = 1 / len(temp)
 
 print(k_matrix)
 
-S = task.P_Task(k_matrix)
+S = AL.P_Task(num_feature, hypo_table, K=k_matrix)

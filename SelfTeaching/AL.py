@@ -9,6 +9,7 @@ import copy
 class ActiveLearning:
     '''Initialize all variables that used in the learning task
     If user_hypo is empty, the program will automatically generate a full boundary task'''
+
     def __init__(self):
         self.knowledge = None   # Teacher's Knowledgeability
 
@@ -30,15 +31,17 @@ class ActiveLearning:
 
     '''set the user hypothesis and to the current hypothesis table
     automatically set the corresponding environment (e.g. variables, tables)'''
+
     def Set(self, user_hypo, knowledgeability):
         self.knowledge = knowledgeability
         self.hypo_table = user_hypo
         self.num_hypo, self.num_feature, self.num_label, self.p_teacher_x_h, self.p_teacher_xy_h, self.p_learner_h_xy, self.p_y_xh, self.delta_g_h, self.phx = Set.Set(self.hypo_table, None,
                                                                                                                                                                        self.knowledge)
-    '''P(h) based on the number of observations'''
-    def P_Task(self, k=None):
-        k = self.delta_g_h if k is None else k
-        p, s = Task.Probability_Task(
-            self.hypo_table, self.num_hypo, self.num_feature, self.num_label, k, 100)
-        print(p, s, sep="\n")
-        return s
+
+'''P(h) based on the number of observations'''
+def P_Task(num_feature, hypo_table, num_label=2, K=None):
+    num_hypo = len(hypo_table)
+    p, s = Task.Probability_Task(
+        hypo_table, num_hypo, num_feature, num_label, K, 100)
+    print(p, s, sep="\n")
+    return s
